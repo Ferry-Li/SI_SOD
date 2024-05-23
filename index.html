@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="Size-invariance Matters: Rethinking Metrics and Losses for Imbalanced Multi-object Salient Object Detection">
+  <meta name="keywords" content="saliency, size-invariance">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image:src" content="http://marigoldmonodepth.github.io/images/marigold_logo_square.jpg">
+  <meta name="twitter:title" content="Size-invariance Matters">
+  <meta name="twitter:description"
+    content="Size-invariance Matters: Rethinking Metrics and Losses for Imbalanced Multi-object Salient Object Detection">
+  <meta name="twitter:creator" content="@AntonObukhov1">
+
+  <title>Size-invariance Matters: Rethinking Metrics and Losses for Imbalanced Multi-object Salient Object Detection
+  </title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FWSVCGZTG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-1FWSVCGZTG');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/bulma.min.css">
+  <link rel="stylesheet" href="./css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./css/twentytwenty.css">
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="icon" href="./images/favicon.svg">
+
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/jquery.event.move.js"></script>
+  <script src="./js/jquery.twentytwenty.js"></script>
+  <script src="./js/bulma-carousel.min.js"></script>
+  <script src="./js/bulma-slider.min.js"></script>
+  <script src="./js/fontawesome.all.min.js"></script>
+
+  <!--MathJax-->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Size-invariance Matters: Rethinking Metrics and Losses for
+              Imbalanced Multi-object Salient Object Detection</h1>
+            <h3 class="title has-text-centered">ICML 2024</h3>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?hl=zh-CN&user=vPStt7cAAAAJ" target="_blank"
+                  rel="noopener noreferrer">
+                  Feiran Li</a>,
+              </span>
+              <span class="author-block">
+                <a href="https://qianqianxu010.github.io/" target="_blank" rel="noopener noreferrer">
+                  Qianqian Xu</a>,
+              </span>
+              <span class="author-block">
+                <a href="https://statusrank.github.io/" target="_blank" rel="noopener noreferrer">
+                  Shilong Bao</a>,
+              </span>
+              <span class="author-block">
+                <a href="https://joshuaas.github.io/" target="_blank" rel="noopener noreferrer">
+                  Zhiyong Yang</a>,
+              </span>
+              <span class="author-block">
+                <a href="https://rmcong.github.io/" target="_blank" rel="noopener noreferrer">
+                  Runmin Cong</a>,
+              </span>
+              <span class="author-block">
+                <a href="https://scst.sysu.edu.cn/members/1401493.htm" target="_blank" rel="noopener noreferrer">
+                  Xiaochun Cao</a>
+              </span>
+              <span class="author-block">
+                <a href="https://people.ucas.ac.cn/~qmhuang" target="_blank" rel="noopener noreferrer">
+                  Qingming Huang</a>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Insititute of Information Engineering, CAS</span>
+              <span class="author-block">Key Laboratory of Intelligent Information Processing, Institute of Computing
+                Technology, CAS</span>
+              <span class="author-block">School of Computer Science and Technology, UCAS</span>
+              <span class="author-block">School of Control Science and Engineering, Shandong University</span>
+              <span class="author-block">School of CyberScience and Tech., Shenzhen Campus, Sun Yat-sen
+                University</span>
+
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2405.09782" target="_blank" rel="noopener noreferrer"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf" style="color: orangered"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="https://github.com/Ferry-Li/SI-SOD" target="_blank" rel="noopener noreferrer"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <!-- Colab Link. 
+                <span class="link-block">
+                  <a href="https://colab.research.google.com/drive/12G8reD13DdpMie5ZQlaFNo2WCGeNUH-u?usp=sharing"
+                    target="_blank" rel="noopener noreferrer" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <img src="images/colab.svg">
+                    </span>
+                    <span>&nbsp;Google Colab</span>
+                  </a>
+                </span>
+                -->
+                <!-- Hugging Face.
+                <span class="link-block">
+                  <a href="https://huggingface.co/spaces/toshas/marigold" target="_blank" rel="noopener noreferrer"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      &#129303;
+                    </span>
+                    <span>Hugging Face Space</span>
+                  </a>
+                </span>
+                 -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <img id="teaser" width="100%" src="./images/examples.png" alt="Examples of Multi-object Saliency Detection." />
+        <h2 class="subtitle has-text-centered">
+          <span class="methodname">SI-SOD</span> considers objects in different sizes.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section pt-0">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Overview</h2>
+          <div class="content has-text-justified">
+            <p>
+              We observe that current metrics are size-sensitive, where larger objects are focused, and smaller ones
+              tend to be ignored.
+              The evaluation should be size-invariant because bias based on size is unjustified without additional
+              semantic information.
+              We therefore introduce <span class="methodname">SI-SOD</span>, namely size-invariant salient object
+              detection.
+              It evaluates each salient object separately and then combines the results, effectively alleviating the
+              imbalance.
+              We further develop an optimization framework tailored to this goal, achieving considerable improvements in
+              detecting objects of different sizes.
+            </p>
+
+            <p>
+              The gallery below presents several images from the datasets and a comparison of <span
+                class="methodname">SI-SOD</span> with the previous
+              state-of-the-art methods. Use the slider and gestures to reveal details on both sides.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+
+
+  <section class="hero is-light is-small">
+    <div class="hero-body">
+      <div class="container">
+        <div id="results-carousel-horizontal" class="carousel results-carousel">
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2205.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2205_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2205_Origin.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2205_Ours.png">
+              </div>
+            </div>
+          </div>
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/172032.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/172032_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/172032_Origin.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/172032_Ours.png">
+              </div>
+            </div>
+          </div>
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/6163.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/6163_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/6163_Origin.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/6163_Ours.png">
+              </div>
+            </div>
+          </div>
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/4066.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/4066_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/4066_Origin.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/4066_Ours.png">
+              </div>
+            </div>
+          </div>
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/sun_aolxbgnccbjmzwpi.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/sun_aolxbgnccbjmzwpi_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/sun_aolxbgnccbjmzwpi_Origin.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/sun_aolxbgnccbjmzwpi_Ours.png">
+              </div>
+            </div>
+          </div>
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/sun_aihhvbrwwjffquxu.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/sun_aihhvbrwwjffquxu_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/sun_aihhvbrwwjffquxu.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/sun_aihhvbrwwjffquxu_Ours.png">
+              </div>
+            </div>
+          </div>
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/ILSVRC2012_test_00002009.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/ILSVRC2012_test_00002009_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/ILSVRC2012_test_00002009_Origin.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/ILSVRC2012_test_00002009_Ours.png">
+              </div>
+            </div>
+          </div>
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/156079.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/156079_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/156079_Origin.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/156079_Ours.png">
+              </div>
+            </div>
+          </div>
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/0466.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/0466_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/0466_Origin.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/0466_Ours.png">
+              </div>
+            </div>
+          </div>
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/1033.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/1033_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/1033_Origin.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/1033_Ours.png">
+              </div>
+            </div>
+          </div>
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2076.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2076_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2076_Origin.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2076_Ours.png">
+              </div>
+            </div>
+          </div>
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2177.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2177_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2177_Origin.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2177_Ours.png">
+              </div>
+            </div>
+          </div>
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2196.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2196_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2196_Origin.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2196_Ours.png">
+              </div>
+            </div>
+          </div>
+
+          <div class="twoitem">
+            <div class="twentytwenty-container twentytwenty-container-top">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2318.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2318_Ours.png">
+              </div>
+            </div>
+            <div class="twentytwenty-container twentytwenty-container-bottom">
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2318_Origin.png">
+              </div>
+              <div class="cmpcontent">
+                <img src="./images/MSOD/new/2318_Ours.png">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <script>
+    $(window).on('load', function () {
+      bulmaCarousel.attach('#results-carousel-horizontal', {
+        slidesToScroll: 1,
+        slidesToShow: 3,
+        loop: true,
+        autoplay: true,
+      });
+
+      bulmaCarousel.attach('#results-carousel-vertical', {
+        slidesToScroll: 1,
+        slidesToShow: 5,
+        loop: true,
+        autoplay: true,
+      });
+
+      $(".twentytwenty-container-top").twentytwenty({
+        before_label: 'Input',
+        after_label: 'Ours',
+        default_offset_pct: 0.75,
+      });
+      $(".twentytwenty-container-bottom").twentytwenty({
+        before_label: 'Previous',
+        after_label: 'Ours',
+        default_offset_pct: 0.5,
+      });
+    });
+  </script>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Method. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Evaluation</h2>
+          <div class="content has-text-justified">
+            <h3 class="title has-text-centered">
+              Size-Invariance & Size-Sensitive
+            </h3>
+
+            <p>
+              Current metrics can be size-sensitive, as shown in the images above. The left-top and right-top are the
+              original image and the corresponding label mask, respectively.
+              The left-bottom and right-bottom are the results predicted by previous methods and ours.
+              It is obvious that previous methods could merely detect the larger object on the right.
+              In comparison, ours successfully capture all salient objects.
+              However, ours induces a worse MAE than the prediction generated by previous methods.
+              Large objects dominate size-sensitive metrics, consequently leading to practical performance degradation
+              because there are many cases where small objects are critical for downstream tasks.
+
+              Our proposed size-invariance metric, however, equally consider each object, and are therefore more
+              consistent with usual visual perceptions.
+
+            </p>
+
+            <img id="metric_visualization" width="100%" src="./images/metric.png" alt="MAE" />
+
+            <h3 class="title has-text-centered">
+              Visualization
+            </h3>
+
+            <p>
+              Images below illustarte how we consider each object. For the left image, there is a foreground frame ① and
+              a background frame ②.
+              For the right image, there are five foreground frames, namely ① to ⑤, and a background frame ⑥.
+            </p>
+
+            <img id="Visualization" width="100%" src="./images/sketch.png" alt="Visualization" />
+
+            <h3 class="title has-text-centered">
+              Optimization
+            </h3>
+
+            <p>
+              Motivated by the principles of the size-invariant evaluation, our optimization goal is expressed as
+              follows:
+              $$
+              \mathcal{L}_{\mathsf{SI}}(f)=\sum_{k=1}^{K} \ell(f_k^{fore}) + \alpha \ell(f_{K+1}^{back}),
+              $$
+              where $\ell(\cdot)$ could be any popular loss in the SOD community (such as $\mathsf{BCE}$ or
+              $\mathsf{IOU}$).
+
+              If $\ell(\cdot)$ is separable, we set $\alpha=\frac{S^{back}_{K+1}}{\sum_{k=1}^{K}S_k^{fore}}$; for
+              composite losses like DiceLoss and IOU Loss, we set $\alpha=0$ because the $\mathsf{TPR}$ is always 0 in
+              the background.
+            </p>
+
+            <p>
+              The proposed loss enjoys a well-gaurateed generalization bound. Specifically, for risk $g(\cdot)$ with
+              $L$-Lipschitz, predictor $f(\cdot)$, then with probability at least $1-\delta$, we have:
+              $$
+              \sup_{f \in \mathcal{F}}(\mathbb{E}[g(f)]-\hat{\mathbb{E}}[g(f)]) \\
+              \le C\cdot \frac{L\sqrt{K}}{N} \cdot \max_i
+              \mathfrak{R}_N(\mathcal{F}|_i)\cdot\log^{\frac{3}{2}+\epsilon}\left(\frac{N}{\max_i
+              \mathfrak{R}_N(\mathcal{F}|_i)}\right) \\
+              +3\sqrt{\frac{\log \frac{2}{\delta}}{2N}},
+              $$
+              where $C>0$ and $\mathfrak{R}(\mathcal{F};x_{1:N})$ denotes the worst-case Rademacher complexity.
+            </p>
+
+
+
+            <h3 class="title has-text-centered">
+              Comparison with other methods
+            </h3>
+
+            <p>
+              Quantitative comparison of <span class="methodname">SI-SOD</span> with SOTA SOD methods on typical
+              datasets.
+              Bold numbers and darker units are better. With our loss function, previous methods gain considerable
+              improvements, especially in multi-object scenarios.
+
+            </p>
+
+            <img id="comparison" width="100%" src="./images/comparison.png" alt="Comparison with other methods" />
+
+            <p class="mt-5">
+              Refer to the pdf paper linked above for more details on qualitative, quantitative, and ablation studies.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--/ Method. -->
+    </div>
+  </section>
+
+
+  <section class="section pt-0" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Citation</h2>
+      <pre class="selectable"><code>@inproceedings{li2024sizeinvariance,
+        title={Size-invariance Matters: Rethinking Metrics and Losses for Imbalanced Multi-object Salient Object Detection}, 
+        author={Feiran Li and Qianqian Xu and Shilong Bao and Zhiyong Yang and Runmin Cong and Xiaochun Cao and Qingming Huang},booktitle={The Forty-first International Conference on Machine Learning},
+        year={2024}
+        }
+}</code></pre>
+    </div>
+  </section>
+
+
+  <footer class="footer pt-4 pb-0">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              Website template based on
+              <a href="https://github.com/nerfies/nerfies.github.io">
+                Nerfies
+              </a>
+              and licensed under
+              <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+                CC-BY-SA-4.0
+              </a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
